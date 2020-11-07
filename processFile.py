@@ -1,24 +1,27 @@
 import os
+import sys
 
-def process_file(p):
-    """Fetch a list of words from a URL.
-    
+
+def fetch_file(file):
+    """Fetch a list of lines from a file.
+
         Args:
-            url: the URL of a UTF-8 text document.
-        
+            file: the filepath of a UTF-8 text document.
+
         Returns:
-            A list of strings containing the words from 
+            A list of strings containing the lines from 
             the document.
     """
-    story = open(p, "r")
+    story = open(file, "r")
     print(story.read())
- 
-    return story
 
 
-p = 'C:/Users/NJ86010/Development/RE auto running business objects reports question.txt'
+def main(file):
+    try:
+        fetch_file(file)
+    except OSError as e:
+        print(f'Error: {e}')
 
-try:
-    process_file(p)
-except OSError as e:
-    print(f'Error: {e}')
+
+if __name__ == '__main__':
+    main(sys.argv[1])
