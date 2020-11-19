@@ -44,3 +44,27 @@ def write_grayscale(filename, pixels):
         bmp.write(b'\x00\x00\x00\x00') # Use whole color table
         bmp.write(b'\x00\x00\x00\x00') # All colors are important
 
+        # Color palette - a linear grayscale
+        for c in range(256):
+            bmp.write(bytes((c,c,c,0))) #Blue, Green, Red, Zero
+
+        # Pixel data
+        pixel_data_bookmark = bmp.tell()
+        for row in reversed(pixels):
+            row_data = bytes(row)
+            bmp.write(row_data)
+            padding = b'\x00' * ((4 - (len(row) % 4)) % 4) # Pad row to multiple of four bytes
+            bmp.write(padding)
+        
+        # End of file
+        eof_bookmark = bmp.tell()
+
+        # Fill in file size placeholder
+        bmp.seek(size_bookmark)
+        bmp.write(_int32_to_bytes(eof_bookmark))
+
+        # Fill in pixel offset placeholder
+        bmp.seel(pixel_offset_bookmark)
+        bmp.write(_int32_to_bytes(pixel_data_bookmark))
+
+        
